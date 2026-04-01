@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import Image from "next/image";
+import SafeImage from "@/components/ui/SafeImage";
 import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Testimonials() {
@@ -18,8 +18,8 @@ export default function Testimonials() {
       image: "https://i.pravatar.cc/150?img=1",
       rating: 5,
       text: language === "hi" 
-        ? "प्रकाश मल्टी-स्पेशलिटी क्लिनिक में मुझे जो देखभाल मिली वह असाधारण थी। डॉ. शर्मा ने हर चीज को अच्छी तरह से समझाने के लिए समय निकाला और मुझे पूरी तरह से सहज महसूस कराया।" 
-        : "The level of care I received at Prakash Multi-Speciality Clinic was exceptional. Dr. Sharma took the time to explain everything thoroughly and made me feel completely at ease.",
+        ? "मेडीकेयर मल्टी-स्पेशलिटी क्लिनिक में मुझे जो देखभाल मिली वह असाधारण थी। डॉ. शर्मा ने हर चीज को अच्छी तरह से समझाने के लिए समय निकाला और मुझे पूरी तरह से सहज महसूस कराया।" 
+        : "The level of care I received at MediCare Multi-Speciality Clinic was exceptional. Dr. Sharma took the time to explain everything thoroughly and made me feel completely at ease.",
       specialty: t("doctors.filters")[1],
       doctor: language === "hi" ? "डॉ. राजेश शर्मा" : "Dr. Rajesh Sharma",
     },
@@ -30,8 +30,8 @@ export default function Testimonials() {
       image: "https://i.pravatar.cc/150?img=3",
       rating: 5,
       text: language === "hi" 
-        ? "मैं वीडियो परामर्श को लेकर संशय में था, लेकिन प्रकाश क्लिनिक ने मेरा विचार बदल दिया। गुणवत्ता उत्कृष्ट थी और डॉ. अय्यर अविश्वसनीय रूप से पेशेवर थे।" 
-        : "I was skeptical about video consultations, but Prakash Clinic changed my mind. The quality was excellent, and Dr. Iyer was incredibly professional.",
+        ? "मैं वीडियो परामर्श को लेकर संशय में था, लेकिन मेडीकेयर क्लिनिक ने मेरा विचार बदल दिया। गुणवत्ता उत्कृष्ट थी और डॉ. अय्यर अविश्वसनीय रूप से पेशेवर थे।" 
+        : "I was skeptical about video consultations, but MediCare Clinic changed my mind. The quality was excellent, and Dr. Iyer was incredibly professional.",
       specialty: t("doctors.filters")[2],
       doctor: language === "hi" ? "डॉ. अनन्या अय्यर" : "Dr. Ananya Iyer",
     },
@@ -95,12 +95,13 @@ export default function Testimonials() {
               {/* Image Side */}
               <div className="relative">
                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
-                  <Image
+                  <SafeImage
                     src={testimonials[currentIndex].image}
                     alt={testimonials[currentIndex].name}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
+                    fallback="/placeholder-user.jpg"
                   />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center">
@@ -125,12 +126,13 @@ export default function Testimonials() {
                 {/* Author */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 rounded-full overflow-hidden">
-                    <Image
+                    <SafeImage
                       src={testimonials[currentIndex].image}
                       alt={testimonials[currentIndex].name}
                       width={56}
                       height={56}
                       className="object-cover"
+                      fallback="/placeholder-user.jpg"
                     />
                   </div>
                   <div>

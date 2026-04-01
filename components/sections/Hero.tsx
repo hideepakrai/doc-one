@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Users, Calendar, Award } from "lucide-react";
-import Image from "next/image";
+import SafeImage from "@/components/ui/SafeImage";
 import Link from "next/link";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -92,12 +92,13 @@ export default function Hero() {
                     key={i}
                     className="w-10 h-10 rounded-full border-2 border-background bg-muted overflow-hidden"
                   >
-                    <Image
+                    <SafeImage
                       src={`https://i.pravatar.cc/80?img=${i + 10}`}
                       alt="Patient"
                       width={40}
                       height={40}
                       className="w-full h-full object-cover"
+                      fallback="/placeholder-user.jpg"
                     />
                   </div>
                 ))}
@@ -126,13 +127,14 @@ export default function Hero() {
             <div className="relative">
               {/* Main Image */}
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                <Image
+                <SafeImage
                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
                   alt="Professional doctor in modern clinic"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                   className="object-cover"
                   priority
+                  fallback="/placeholder.jpg"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent" />
               </div>
@@ -164,12 +166,13 @@ export default function Hero() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <Image
+                    <SafeImage
                       src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=100&q=80"
                       alt="Dr. Rajesh"
                       width={48}
                       height={48}
                       className="w-full h-full object-cover"
+                      fallback="/placeholder-user.jpg"
                     />
                   </div>
                   <div>

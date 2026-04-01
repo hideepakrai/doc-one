@@ -1,48 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
-import Doctor from "@/models/Doctor";
+import { DoctorService } from "@/services/doctor.service";
+import { isAdmin } from "@/lib/auth";
 import Specialization from "@/models/Specialization";
+import dbConnect from "@/lib/dbConnect";
 
 export async function GET(req: NextRequest) {
   try {
-    await dbConnect();
-    
     const { searchParams } = new URL(req.url);
-    const specializationName = searchParams.get("specialization");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "100"); // Standard high limit for user view unless paginated UI
+    const search = searchParams.get("search") || undefined;
+    const specialization = searchParams.get("specialization") || undefined;
 
-    let query = {};
-    
-    if (specializationName && specializationName !== "All" && specializationName !== "सभी") {
-      // Find the specialization object by name first
-      const spec = await Specialization.findOne({
-        // Simple case insensitive check
-        name: new RegExp(`^${specializationName}$`, "i")
-      });
-      
-      if (spec) {
-        query = { specialization: spec._id };
-      }
-    }
+    const result = await DoctorService.getDoctors({
+      page,
+      limit,
+      search,
+      specialization,
+    });
 
-    const doctors = await Doctor.find(query)
-      .populate("specialization", "name icon")
-      .sort({ createdAt: -1 });
-
-    // Transform response so frontend can consume it easily
-    const transformedDoctors = doctors.map(doc => ({
-      id: doc._id.toString(),
-      name: doc.name,
-      specialty: doc.specialization?.name || "Unknown",
-      image: doc.image,
-      rating: doc.rating,
-      reviews: doc.reviews,
-      experience: `${doc.experience} years`,
-      location: doc.location,
-      available: doc.availabilityStatus === "Available",
-      nextSlot: doc.nextAvailable,
-    }));
-
-    return NextResponse.json(transformedDoctors, { status: 200 });
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("GET doctors error:", error);
     return NextResponse.json({ error: "Failed to fetch doctors" }, { status: 500 });
@@ -51,13 +28,18 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    // Admin only
+    if (!(await isAdmin(req))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await dbConnect();
     const body = await req.json();
     
-    // Create new doctor
+    // Original logic for creating and updating specialization count
+    const Doctor = (await import("@/models/Doctor")).default;
     const newDoctor = await Doctor.create(body);
     
-    // Auto Update Logic: Increment doctorCount in Specialization
     if (newDoctor.specialization) {
       await Specialization.findByIdAndUpdate(
         newDoctor.specialization,

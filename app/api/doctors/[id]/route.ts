@@ -1,31 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
-import Doctor from "@/models/Doctor";
-import Specialization from "@/models/Specialization";
+import { DoctorService } from "@/services/doctor.service";
+import { isAdmin } from "@/lib/auth";
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await dbConnect();
-    const { id } = await params;
+    if (!(await isAdmin(req))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = params;
+    const body = await req.json();
     
-    const doctor = await Doctor.findById(id);
-    if (!doctor) {
-      return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
+    const updatedDoctor = await DoctorService.updateDoctor(id, body);
+    return NextResponse.json(updatedDoctor, { status: 200 });
+  } catch (error: any) {
+    console.error("PUT doctor error:", error);
+    return NextResponse.json({ error: error.message || "Failed to update doctor" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    if (!(await isAdmin(req))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Auto Update Logic: Decrement doctorCount on deletion
-    if (doctor.specialization) {
-      await Specialization.findByIdAndUpdate(
-        doctor.specialization,
-        { $inc: { doctorCount: -1 } }
-      );
-    }
-
-    await Doctor.findByIdAndDelete(id);
-
+    const { id } = params;
+    await DoctorService.deleteDoctor(id);
     return NextResponse.json({ message: "Doctor deleted successfully" }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("DELETE doctor error:", error);
-    return NextResponse.json({ error: "Failed to delete doctor" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to delete doctor" }, { status: 500 });
   }
 }

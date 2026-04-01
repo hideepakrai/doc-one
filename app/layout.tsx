@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
+import { Toaster } from "sonner";
 import { LanguageProvider } from '@/lib/LanguageContext'
 
 const inter = Inter({ 
@@ -15,9 +16,11 @@ const playfair = Playfair_Display({
   variable: '--font-playfair'
 });
 
+import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
+
 export const metadata: Metadata = {
-  title: 'Prakash Multi-Speciality Clinic | Delhi\'s Trusted Healthcare',
-  description: 'Experience world-class healthcare at Prakash Multi-Speciality Clinic, Vasant Vihar, New Delhi. Expert doctors in Cardiology, Neurology, Pediatrics, and more.',
+  title: `${SITE_NAME} Multi-Speciality Clinic | Delhi's Trusted Healthcare`,
+  description: SITE_DESCRIPTION,
   generator: 'v0.app',
   icons: {
     icon: [
@@ -48,6 +51,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <LanguageProvider>
           {children}
+          <Toaster position="top-right" richColors />
           <Analytics />
         </LanguageProvider>
       </body>

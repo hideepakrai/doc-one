@@ -17,9 +17,15 @@ export default function Specializations() {
       try {
         const res = await fetch("/api/specializations");
         const data = await res.json();
-        setSpecializations(data);
+        if (Array.isArray(data)) {
+          setSpecializations(data);
+        } else {
+          console.error("Specializations data is not an array:", data);
+          setSpecializations([]);
+        }
       } catch (error) {
         console.error("Failed to fetch specializations:", error);
+        setSpecializations([]);
       } finally {
         setIsLoading(false);
       }
