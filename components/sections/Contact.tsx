@@ -4,29 +4,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Check, Clock, Building2 } from "lucide-react";
 import Link from "next/link";
-
-const locations = [
-  {
-    name: "Manhattan Medical Center",
-    address: "123 Health Avenue, Manhattan, NY 10001",
-    phone: "+1 (555) 123-4567",
-    hours: "Mon-Sat: 8AM-8PM",
-  },
-  {
-    name: "Brooklyn Health Hub",
-    address: "456 Wellness Blvd, Brooklyn, NY 11201",
-    phone: "+1 (555) 234-5678",
-    hours: "Mon-Sat: 8AM-8PM",
-  },
-  {
-    name: "Queens Family Clinic",
-    address: "789 Care Street, Queens, NY 11375",
-    phone: "+1 (555) 345-6789",
-    hours: "Mon-Fri: 9AM-6PM",
-  },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Contact() {
+  const { t, language } = useLanguage();
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -35,6 +16,15 @@ export default function Contact() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+
+  const locations = [
+    {
+      name: t("header.logo") + " " + t("header.logoSuffix"),
+      address: t("footer.address"),
+      phone: t("footer.phone"),
+      hours: language === "hi" ? "सोम-शनि: सुबह 9 बजे - रात 9 बजे" : "Mon-Sat: 9AM-9PM",
+    },
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,14 +43,15 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            Get in Touch
+            {language === "hi" ? "संपर्क करें" : "Get in Touch"}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium mb-6 text-balance">
-            {"We're"} here to help
+            {language === "hi" ? "हम आपकी मदद के लिए यहाँ हैं" : "We're here to help"}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have questions about our services or need to schedule an appointment? Reach out to us
-            through any of the channels below.
+            {language === "hi" 
+              ? "हमारी सेवाओं के बारे में प्रश्न हैं या अपॉइंटमेंट लेना चाहते हैं? नीचे दिए गए किसी भी माध्यम से हमसे संपर्क करें।" 
+              : "Have questions about our services or need to schedule an appointment? Reach out to us through any of the channels below."}
           </p>
         </motion.div>
 
@@ -82,15 +73,19 @@ export default function Contact() {
                   <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                     <Check className="w-10 h-10 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-semibold mb-3">Message Sent!</h3>
+                  <h3 className="text-2xl font-semibold mb-3">
+                    {language === "hi" ? "संदेश भेज दिया गया!" : "Message Sent!"}
+                  </h3>
                   <p className="text-muted-foreground mb-6">
-                    {"We've"} received your message and will get back to you within 24 hours.
+                    {language === "hi" 
+                      ? "हमें आपका संदेश मिल गया है और हम 24 घंटों के भीतर आपसे संपर्क करेंगे।" 
+                      : "We've received your message and will get back to you within 24 hours."}
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Send Another Message
+                    {language === "hi" ? "एक और संदेश भेजें" : "Send Another Message"}
                   </button>
                 </motion.div>
               ) : (
@@ -101,7 +96,7 @@ export default function Contact() {
                         htmlFor="name"
                         className="block text-sm font-medium mb-2"
                       >
-                        Full Name
+                        {language === "hi" ? "पूरा नाम" : "Full Name"}
                       </label>
                       <input
                         type="text"
@@ -111,7 +106,7 @@ export default function Contact() {
                           setFormState({ ...formState, name: e.target.value })
                         }
                         className="w-full h-12 px-4 rounded-xl bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                        placeholder="John Doe"
+                        placeholder={language === "hi" ? "राजेश शर्मा" : "Rajesh Sharma"}
                         required
                       />
                     </div>
@@ -120,7 +115,7 @@ export default function Contact() {
                         htmlFor="email"
                         className="block text-sm font-medium mb-2"
                       >
-                        Email Address
+                        {language === "hi" ? "ईमेल पता" : "Email Address"}
                       </label>
                       <input
                         type="email"
@@ -130,7 +125,7 @@ export default function Contact() {
                           setFormState({ ...formState, email: e.target.value })
                         }
                         className="w-full h-12 px-4 rounded-xl bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                        placeholder="john@example.com"
+                        placeholder="rajesh@example.com"
                         required
                       />
                     </div>
@@ -142,7 +137,7 @@ export default function Contact() {
                         htmlFor="phone"
                         className="block text-sm font-medium mb-2"
                       >
-                        Phone Number
+                        {language === "hi" ? "फ़ोन नंबर" : "Phone Number"}
                       </label>
                       <input
                         type="tel"
@@ -152,7 +147,7 @@ export default function Contact() {
                           setFormState({ ...formState, phone: e.target.value })
                         }
                         className="w-full h-12 px-4 rounded-xl bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                        placeholder="+1 (555) 000-0000"
+                        placeholder="+91 98765-43210"
                       />
                     </div>
                     <div>
@@ -160,7 +155,7 @@ export default function Contact() {
                         htmlFor="subject"
                         className="block text-sm font-medium mb-2"
                       >
-                        Subject
+                        {language === "hi" ? "विषय" : "Subject"}
                       </label>
                       <select
                         id="subject"
@@ -171,11 +166,11 @@ export default function Contact() {
                         className="w-full h-12 px-4 rounded-xl bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                         required
                       >
-                        <option value="">Select a subject</option>
-                        <option value="appointment">Book Appointment</option>
-                        <option value="inquiry">General Inquiry</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="other">Other</option>
+                        <option value="">{language === "hi" ? "एक विषय चुनें" : "Select a subject"}</option>
+                        <option value="appointment">{t("header.book")}</option>
+                        <option value="inquiry">{language === "hi" ? "सामान्य पूछताछ" : "General Inquiry"}</option>
+                        <option value="feedback">{language === "hi" ? "परामर्श" : "Feedback"}</option>
+                        <option value="other">{language === "hi" ? "अन्य" : "Other"}</option>
                       </select>
                     </div>
                   </div>
@@ -185,7 +180,7 @@ export default function Contact() {
                       htmlFor="message"
                       className="block text-sm font-medium mb-2"
                     >
-                      Message
+                      {language === "hi" ? "संदेश" : "Message"}
                     </label>
                     <textarea
                       id="message"
@@ -195,7 +190,7 @@ export default function Contact() {
                       }
                       rows={5}
                       className="w-full px-4 py-3 rounded-xl bg-muted border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
-                      placeholder="How can we help you?"
+                      placeholder={language === "hi" ? "हम आपकी कैसे मदद कर सकते हैं?" : "How can we help you?"}
                       required
                     />
                   </div>
@@ -205,7 +200,7 @@ export default function Contact() {
                     className="w-full h-14 rounded-xl bg-primary text-primary-foreground font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
                   >
                     <Send className="w-5 h-5" />
-                    Send Message
+                    {language === "hi" ? "संदेश भेजें" : "Send Message"}
                   </button>
                 </form>
               )}
@@ -223,7 +218,7 @@ export default function Contact() {
             <div className="bg-card rounded-2xl border border-border p-6">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-primary" />
-                Our Locations
+                {language === "hi" ? "हमारे स्थान" : "Our Locations"}
               </h3>
               <div className="space-y-6">
                 {locations.map((location, index) => (
@@ -255,24 +250,28 @@ export default function Contact() {
 
             {/* Quick Contact */}
             <div className="bg-primary/5 rounded-2xl border border-primary/20 p-6">
-              <h3 className="text-xl font-semibold mb-4">Need Immediate Assistance?</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                {language === "hi" ? "तत्काल सहायता की आवश्यकता है?" : "Need Immediate Assistance?"}
+              </h3>
               <p className="text-muted-foreground mb-6">
-                Our support team is available around the clock to help you with urgent matters.
+                {language === "hi" 
+                  ? "हमारी सहायता टीम आपकी तत्काल मामलों में मदद के लिए चौबीसों घंटे उपलब्ध है।" 
+                  : "Our support team is available around the clock to help you with urgent matters."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="tel:+15559110000"
+                  href={`tel:${t("footer.phone")}`}
                   className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
-                  Call Now
+                  {language === "hi" ? "अभी कॉल करें" : "Call Now"}
                 </Link>
                 <Link
-                  href="mailto:urgent@medicare.com"
+                  href={`mailto:${t("footer.email")}`}
                   className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl border-2 border-border text-foreground font-medium hover:bg-muted transition-colors"
                 >
                   <Mail className="w-5 h-5" />
-                  Email Us
+                  {language === "hi" ? "ईमेल करें" : "Email Us"}
                 </Link>
               </div>
             </div>

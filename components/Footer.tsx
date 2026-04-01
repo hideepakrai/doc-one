@@ -14,34 +14,36 @@ import {
   Linkedin,
 } from "lucide-react";
 import Link from "next/link";
-
-const footerLinks = {
-  columnOne: [
-    { name: "Find a Doctor", href: "#doctors" },
-    { name: "Specializations", href: "#specializations" },
-    { name: "Book Appointment", href: "#book" },
-    { name: "Our Locations", href: "#locations" },
-    { name: "Patient Portal", href: "#portal" },
-  ],
-  columnTwo: [
-    { name: "About MediCare", href: "#about" },
-    { name: "Careers", href: "#careers" },
-    { name: "News & Updates", href: "#news" },
-    { name: "Privacy Policy", href: "#privacy" },
-    { name: "Terms of Service", href: "#terms" },
-  ],
-};
-
-const socialLinks = [
-  { name: "Facebook", icon: Facebook, href: "#" },
-  { name: "Twitter", icon: Twitter, href: "#" },
-  { name: "Instagram", icon: Instagram, href: "#" },
-  { name: "LinkedIn", icon: Linkedin, href: "#" },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Footer() {
+  const { t, language } = useLanguage();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+
+  const footerLinks = {
+    columnOne: [
+      { name: language === "hi" ? "डॉक्टर खोजें" : "Find a Doctor", href: "#doctors" },
+      { name: language === "hi" ? "विशेषज्ञता" : "Specializations", href: "#specializations" },
+      { name: t("header.book"), href: "#book" },
+      { name: language === "hi" ? "हमारे स्थान" : "Our Locations", href: "#contact" },
+      { name: language === "hi" ? "पेशेंट पोर्टल" : "Patient Portal", href: "#portal" },
+    ],
+    columnTwo: [
+      { name: language === "hi" ? "हमारे बारे में" : "About Us", href: "#about" },
+      { name: language === "hi" ? "करियर" : "Careers", href: "#careers" },
+      { name: language === "hi" ? "समाचार और अपडेट" : "News & Updates", href: "#news" },
+      { name: language === "hi" ? "गोपनीयता नीति" : "Privacy Policy", href: "#privacy" },
+      { name: language === "hi" ? "सेवा की शर्तें" : "Terms of Service", href: "#terms" },
+    ],
+  };
+
+  const socialLinks = [
+    { name: "Facebook", icon: Facebook, href: "#" },
+    { name: "Twitter", icon: Twitter, href: "#" },
+    { name: "Instagram", icon: Instagram, href: "#" },
+    { name: "LinkedIn", icon: Linkedin, href: "#" },
+  ];
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,10 +61,12 @@ export default function Footer() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h3 className="text-2xl sm:text-3xl font-serif font-medium mb-4">
-                Stay informed about your health
+                {language === "hi" ? "अपने स्वास्थ्य के बारे में सूचित रहें" : "Stay informed about your health"}
               </h3>
               <p className="text-background/70 text-lg">
-                Subscribe to our newsletter for health tips, new services, and exclusive offers.
+                {language === "hi" 
+                  ? "स्वास्थ्य युक्तियों, नई सेवाओं और विशेष प्रस्तावों के लिए हमारे न्यूज़लेटर की सदस्यता लें।" 
+                  : "Subscribe to our newsletter for health tips, new services, and exclusive offers."}
               </p>
             </div>
             <div>
@@ -75,9 +79,13 @@ export default function Footer() {
                   <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
                     <Mail className="w-8 h-8 text-accent" />
                   </div>
-                  <p className="text-xl font-medium mb-2">Thank you for subscribing!</p>
+                  <p className="text-xl font-medium mb-2">
+                    {language === "hi" ? "सदस्यता लेने के लिए धन्यवाद!" : "Thank you for subscribing!"}
+                  </p>
                   <p className="text-background/70">
-                    {"You'll"} receive our latest updates in your inbox.
+                    {language === "hi" 
+                      ? "आपको हमारे नवीनतम अपडेट अपने इनबॉक्स में प्राप्त होंगे।" 
+                      : "You'll receive our latest updates in your inbox."}
                   </p>
                 </motion.div>
               ) : (
@@ -88,7 +96,7 @@ export default function Footer() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
+                      placeholder={language === "hi" ? "अपना ईमेल पता दर्ज करें" : "Enter your email address"}
                       className="w-full h-14 pl-12 pr-4 rounded-xl bg-background/10 border border-background/20 text-background placeholder:text-background/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
                       required
                     />
@@ -99,7 +107,7 @@ export default function Footer() {
                     whileTap={{ scale: 0.98 }}
                     className="h-14 px-8 rounded-xl bg-accent text-accent-foreground font-medium flex items-center justify-center gap-2 hover:bg-accent/90 transition-colors"
                   >
-                    Subscribe
+                    {language === "hi" ? "सदस्यता लें" : "Subscribe"}
                     <ArrowRight className="w-5 h-5" />
                   </motion.button>
                 </form>
@@ -119,32 +127,33 @@ export default function Footer() {
                 <Shield className="w-5 h-5 text-foreground" />
               </div>
               <span className="text-xl font-semibold tracking-tight">
-                Medi<span className="text-accent">Care</span>
+                {t("header.logo")}<span className="text-accent">{t("header.logoSuffix")}</span>
               </span>
             </Link>
             <p className="text-background/70 mb-6 leading-relaxed">
-              Delivering exceptional healthcare experiences through innovation, compassion, and
-              excellence.
+              {language === "hi" 
+                ? "नवाचार, करुणा और उत्कृष्टता के माध्यम से असाधारण स्वास्थ्य अनुभव प्रदान करना।" 
+                : "Delivering exceptional healthcare experiences through innovation, compassion, and excellence."}
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-background/70">
                 <Phone className="w-5 h-5" />
-                <span>+1 (555) 123-4567</span>
+                <span>{t("footer.phone")}</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <Mail className="w-5 h-5" />
-                <span>contact@medicare.com</span>
+                <span>{t("footer.email")}</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <MapPin className="w-5 h-5" />
-                <span>123 Health Avenue, NY 10001</span>
+                <span>{t("footer.address")}</span>
               </div>
             </div>
           </div>
 
           {/* Links Column 1 */}
           <div>
-            <h4 className="font-semibold mb-6">Quick Links</h4>
+            <h4 className="font-semibold mb-6">{language === "hi" ? "त्वरित लिंक" : "Quick Links"}</h4>
             <ul className="space-y-4">
               {footerLinks.columnOne.map((link) => (
                 <li key={link.name}>
@@ -161,7 +170,7 @@ export default function Footer() {
 
           {/* Links Column 2 */}
           <div>
-            <h4 className="font-semibold mb-6">Company</h4>
+            <h4 className="font-semibold mb-6">{language === "hi" ? "कंपनी" : "Company"}</h4>
             <ul className="space-y-4">
               {footerLinks.columnTwo.map((link) => (
                 <li key={link.name}>
@@ -178,7 +187,7 @@ export default function Footer() {
 
           {/* Social & Certifications */}
           <div>
-            <h4 className="font-semibold mb-6">Connect With Us</h4>
+            <h4 className="font-semibold mb-6">{language === "hi" ? "हमसे जुड़ें" : "Connect With Us"}</h4>
             <div className="flex gap-3 mb-8">
               {socialLinks.map((social) => (
                 <Link
@@ -192,13 +201,13 @@ export default function Footer() {
               ))}
             </div>
             <div className="space-y-4">
-              <p className="text-sm text-background/50">Certifications</p>
+              <p className="text-sm text-background/50">{language === "hi" ? "प्रमाणन" : "Certifications"}</p>
               <div className="flex gap-3">
                 <div className="px-3 py-2 rounded-lg bg-background/10 text-xs font-medium">
-                  HIPAA Compliant
+                  {language === "hi" ? "NABH प्रमाणित" : "NABH Accredited"}
                 </div>
                 <div className="px-3 py-2 rounded-lg bg-background/10 text-xs font-medium">
-                  ISO 27001
+                  ISO 9001:2015
                 </div>
               </div>
             </div>
@@ -211,17 +220,17 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-background/50 text-sm">
-              © {new Date().getFullYear()} MediCare. All rights reserved.
+              © {new Date().getFullYear()} {t("header.logo")}{t("header.logoSuffix")}. {language === "hi" ? "सर्वाधिकार सुरक्षित।" : "All rights reserved."}
             </p>
             <div className="flex items-center gap-6 text-sm text-background/50">
               <Link href="#privacy" className="hover:text-background transition-colors">
-                Privacy
+                {language === "hi" ? "गोपनीयता" : "Privacy"}
               </Link>
               <Link href="#terms" className="hover:text-background transition-colors">
-                Terms
+                {language === "hi" ? "शर्तें" : "Terms"}
               </Link>
               <Link href="#accessibility" className="hover:text-background transition-colors">
-                Accessibility
+                {language === "hi" ? "पहुंच क्षमता" : "Accessibility"}
               </Link>
             </div>
           </div>

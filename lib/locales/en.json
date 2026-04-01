@@ -1,0 +1,47 @@
+{
+  "header": {
+    "logo": "Prakash",
+    "logoSuffix": "Clinic",
+    "nav": {
+      "specializations": "Specializations",
+      "doctors": "Our Doctors",
+      "services": "Services",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "book": "Book Appointment",
+    "searchPlaceholder": "Search doctors...",
+    "signIn": "Sign In"
+  },
+  "hero": {
+    "badge": "Trusted by 100,000+ patients in Delhi",
+    "headline": "Exceptional care for the heart of Delhi",
+    "subheadline": "Connect with North India's top specialists, access comprehensive care, and experience healthcare reimagined for the modern age.",
+    "cta": {
+      "book": "Book Appointment",
+      "explore": "Explore Doctors"
+    },
+    "stats": [
+      { "label": "Expert Doctors", "value": "50+" },
+      { "label": "Appointments Daily", "value": "500+" },
+      { "label": "Years of Excellence", "value": "15+" }
+    ]
+  },
+  "doctors": {
+    "badge": "Our Team",
+    "headline": "Meet our expert doctors",
+    "subheadline": "Our team of board-certified physicians brings decades of combined experience to provide you with the best possible care.",
+    "filters": ["All", "Cardiology", "Neurology", "Pediatrics", "Orthopedics"],
+    "viewProfile": "View Profile",
+    "bookNow": "Book Now",
+    "viewAll": "View All Doctors",
+    "nextAvailable": "Next Available",
+    "location": "Vasant Vihar, New Delhi"
+  },
+  "footer": {
+    "description": "Premium multi-speciality healthcare center providing world-class medical services in the heart of New Delhi.",
+    "address": "12, Palam Road, Vasant Vihar, New Delhi 110057",
+    "phone": "+91-11-2614-XXXX",
+    "copyright": "© 2026 Prakash Multi-Speciality Clinic. All rights reserved."
+  }
+}

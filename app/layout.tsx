@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
+import { LanguageProvider } from '@/lib/LanguageContext'
+
 const inter = Inter({ 
   subsets: ["latin"],
   variable: '--font-inter'
@@ -14,8 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'MediCare | Premium Healthcare Experience',
-  description: 'Discover world-class specialists, explore comprehensive doctor profiles, and book appointments through a modern, seamless healthcare experience.',
+  title: 'Prakash Multi-Speciality Clinic | Delhi\'s Trusted Healthcare',
+  description: 'Experience world-class healthcare at Prakash Multi-Speciality Clinic, Vasant Vihar, New Delhi. Expert doctors in Cardiology, Neurology, Pediatrics, and more.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -44,8 +46,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased">
-        {children}
-        <Analytics />
+        <LanguageProvider>
+          {children}
+          <Analytics />
+        </LanguageProvider>
       </body>
     </html>
   )

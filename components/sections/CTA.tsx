@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function CTA() {
+  const { t, language } = useLanguage();
+
   return (
     <section id="book" className="py-24 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,7 +34,9 @@ export default function CTA() {
                   transition={{ delay: 0.1 }}
                   className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-primary-foreground mb-6"
                 >
-                  Ready to take the next step in your health journey?
+                  {language === "hi" 
+                    ? "अपने स्वास्थ्य की दिशा में अगला कदम उठाने के लिए तैयार हैं?" 
+                    : "Ready to take the next step in your health journey?"}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -40,8 +45,9 @@ export default function CTA() {
                   transition={{ delay: 0.2 }}
                   className="text-xl text-primary-foreground/80 mb-8"
                 >
-                  Book your appointment today and experience healthcare the way it should be —
-                  personalized, accessible, and exceptional.
+                  {language === "hi" 
+                    ? "आज ही अपना अपॉइंटमेंट बुक करें और स्वास्थ्य सेवा का अनुभव वैसा ही करें जैसा उसे होना चाहिए - व्यक्तिगत, सुलभ और असाधारण।" 
+                    : "Book your appointment today and experience healthcare the way it should be — personalized, accessible, and exceptional."}
                 </motion.p>
 
                 <motion.div
@@ -56,15 +62,15 @@ export default function CTA() {
                     className="group inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl bg-background text-foreground font-medium hover:bg-background/90 transition-colors"
                   >
                     <Calendar className="w-5 h-5" />
-                    Schedule Online
+                    {language === "hi" ? "ऑनलाइन अपॉइंटमेंट" : "Schedule Online"}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link
-                    href="tel:+15551234567"
+                    href="tel:+919812345678"
                     className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl border-2 border-primary-foreground/30 text-primary-foreground font-medium hover:bg-primary-foreground/10 transition-colors"
                   >
                     <Phone className="w-5 h-5" />
-                    Call Us Now
+                    {language === "hi" ? "अभी कॉल करें" : "Call Us Now"}
                   </Link>
                 </motion.div>
               </div>
@@ -84,12 +90,14 @@ export default function CTA() {
                     </div>
                     <div>
                       <h4 className="text-lg font-semibold text-primary-foreground">
-                        Working Hours
+                        {language === "hi" ? "कार्य के घंटे" : "Working Hours"}
                       </h4>
                       <p className="text-primary-foreground/70">
-                        Mon - Sat: 8:00 AM - 8:00 PM
+                        {language === "hi" ? "सोम - शनि: सुबह 9:00 - रात 9:00" : "Mon - Sat: 9:00 AM - 9:00 PM"}
                       </p>
-                      <p className="text-primary-foreground/70">Sun: 9:00 AM - 5:00 PM</p>
+                      <p className="text-primary-foreground/70">
+                        {language === "hi" ? "रवि: सुबह 10:00 - शाम 4:00" : "Sun: 10:00 AM - 4:00 PM"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -101,11 +109,11 @@ export default function CTA() {
                     </div>
                     <div>
                       <h4 className="text-lg font-semibold text-primary-foreground">
-                        Emergency Line
+                        {language === "hi" ? "आपातकालीन नंबर" : "Emergency Line"}
                       </h4>
-                      <p className="text-primary-foreground/70">Available 24/7</p>
+                      <p className="text-primary-foreground/70">{language === "hi" ? "24/7 उपलब्ध" : "Available 24/7"}</p>
                       <p className="text-xl font-semibold text-primary-foreground">
-                        +1 (555) 911-CARE
+                        +91 11 2614 1234
                       </p>
                     </div>
                   </div>
@@ -125,7 +133,7 @@ export default function CTA() {
                     ))}
                   </div>
                   <p className="text-sm text-primary-foreground/80">
-                    patients served this month
+                    {language === "hi" ? "मरीजों की इस महीने सेवा की" : "patients served this month"}
                   </p>
                 </div>
               </motion.div>

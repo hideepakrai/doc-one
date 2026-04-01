@@ -4,42 +4,50 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import Image from "next/image";
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Jennifer Williams",
-    role: "Marketing Director",
-    image: "https://i.pravatar.cc/150?img=1",
-    rating: 5,
-    text: "The level of care I received at MediCare was exceptional. Dr. Mitchell took the time to explain everything thoroughly and made me feel completely at ease. The booking process was seamless, and I appreciated the follow-up care.",
-    specialty: "Cardiology",
-    doctor: "Dr. Sarah Mitchell",
-  },
-  {
-    id: 2,
-    name: "Robert Thompson",
-    role: "Software Engineer",
-    image: "https://i.pravatar.cc/150?img=3",
-    rating: 5,
-    text: "I was skeptical about video consultations, but MediCare changed my mind. The quality was excellent, and Dr. Anderson was incredibly professional. It saved me so much time while still receiving top-notch medical advice.",
-    specialty: "Neurology",
-    doctor: "Dr. James Anderson",
-  },
-  {
-    id: 3,
-    name: "Maria Garcia",
-    role: "School Teacher",
-    image: "https://i.pravatar.cc/150?img=5",
-    rating: 5,
-    text: "As a mother of three, finding quality pediatric care is crucial. Dr. Chen and her team have been wonderful with my children. The clinic is welcoming, and the staff is always patient and understanding.",
-    specialty: "Pediatrics",
-    doctor: "Dr. Emily Chen",
-  },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Testimonials() {
+  const { t, language } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const testimonials = [
+    {
+      id: 1,
+      name: language === "hi" ? "सुनीता अग्रवाल" : "Sunita Agarwal",
+      role: language === "hi" ? "गृहिणी" : "Homemaker",
+      image: "https://i.pravatar.cc/150?img=1",
+      rating: 5,
+      text: language === "hi" 
+        ? "प्रकाश मल्टी-स्पेशलिटी क्लिनिक में मुझे जो देखभाल मिली वह असाधारण थी। डॉ. शर्मा ने हर चीज को अच्छी तरह से समझाने के लिए समय निकाला और मुझे पूरी तरह से सहज महसूस कराया।" 
+        : "The level of care I received at Prakash Multi-Speciality Clinic was exceptional. Dr. Sharma took the time to explain everything thoroughly and made me feel completely at ease.",
+      specialty: t("doctors.filters")[1],
+      doctor: language === "hi" ? "डॉ. राजेश शर्मा" : "Dr. Rajesh Sharma",
+    },
+    {
+      id: 2,
+      name: language === "hi" ? "अमित मल्होत्रा" : "Amit Malhotra",
+      role: language === "hi" ? "बैंक मैनेजर" : "Bank Manager",
+      image: "https://i.pravatar.cc/150?img=3",
+      rating: 5,
+      text: language === "hi" 
+        ? "मैं वीडियो परामर्श को लेकर संशय में था, लेकिन प्रकाश क्लिनिक ने मेरा विचार बदल दिया। गुणवत्ता उत्कृष्ट थी और डॉ. अय्यर अविश्वसनीय रूप से पेशेवर थे।" 
+        : "I was skeptical about video consultations, but Prakash Clinic changed my mind. The quality was excellent, and Dr. Iyer was incredibly professional.",
+      specialty: t("doctors.filters")[2],
+      doctor: language === "hi" ? "डॉ. अनन्या अय्यर" : "Dr. Ananya Iyer",
+    },
+    {
+      id: 3,
+      name: language === "hi" ? "प्रिया सिंह" : "Priya Singh",
+      role: language === "hi" ? "स्कूल शिक्षिका" : "School Teacher",
+      image: "https://i.pravatar.cc/150?img=5",
+      rating: 5,
+      text: language === "hi" 
+        ? "एक माँ के रूप में, गुणवत्तापूर्ण बाल रोग देखभाल ढूँढना महत्वपूर्ण है। डॉ. गुप्ता और उनकी टीम मेरे बच्चों के साथ बहुत अच्छी रही है।" 
+        : "As a mother, finding quality pediatric care is crucial. Dr. Gupta and her team have been wonderful with my children.",
+      specialty: t("doctors.filters")[3],
+      doctor: language === "hi" ? "डॉ. सुनीता गुप्ता" : "Dr. Sunita Gupta",
+    },
+  ];
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -61,13 +69,15 @@ export default function Testimonials() {
           className="text-center mb-16"
         >
           <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            Patient Stories
+            {language === "hi" ? "मरीजों की कहानियाँ" : "Patient Stories"}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium mb-6 text-balance">
-            What our patients say
+            {language === "hi" ? "हमारे मरीज क्या कहते हैं" : "What our patients say"}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real experiences from real patients who have trusted us with their healthcare needs.
+            {language === "hi" 
+              ? "उन वास्तविक मरीजों के वास्तविक अनुभव जिन्होंने अपनी स्वास्थ्य संबंधी जरूरतों के लिए हम पर भरोसा किया है।" 
+              : "Real experiences from real patients who have trusted us with their healthcare needs."}
           </p>
         </motion.div>
 
@@ -84,11 +94,12 @@ export default function Testimonials() {
             >
               {/* Image Side */}
               <div className="relative">
-                <div className="aspect-[4/3] rounded-3xl overflow-hidden">
+                <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
                   <Image
                     src={testimonials[currentIndex].image}
                     alt={testimonials[currentIndex].name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
                 </div>
@@ -134,7 +145,7 @@ export default function Testimonials() {
                     <Star className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Treated by</p>
+                    <p className="text-sm text-muted-foreground">{language === "hi" ? "इलाज किया गया" : "Treated by"}</p>
                     <p className="font-medium">
                       {testimonials[currentIndex].doctor} •{" "}
                       {testimonials[currentIndex].specialty}

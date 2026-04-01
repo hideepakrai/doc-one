@@ -25,6 +25,11 @@ import {
   Users,
 } from "lucide-react";
 
+export const metadata = {
+  title: "Introduction | MediCare",
+  description: "A digital healthcare platform that feels as trusted as the care itself. Explore our introduction and product screenshots.",
+};
+
 const pageLinks = [
   { label: "Overview", href: "#overview" },
   { label: "Solution", href: "#solution" },
@@ -260,7 +265,7 @@ function SectionHeading({
   );
 }
 
-export default function CaseStudyPage() {
+export default function IntroductionPage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top_right,_rgba(20,184,166,0.14),_transparent_26%),radial-gradient(circle_at_top_left,_rgba(16,185,129,0.1),_transparent_22%),linear-gradient(180deg,_#f8fffe_0%,_#f7fbfb_45%,_#f3f8f7_100%)] text-slate-950">
       <header className="sticky top-0 z-50 border-b border-teal-100/70 bg-white/78 backdrop-blur-2xl">
@@ -273,7 +278,7 @@ export default function CaseStudyPage() {
               <p className="text-lg font-semibold tracking-tight">
                 Medi<span className="text-teal-700">Care</span>
               </p>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Case Study</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Introduction</p>
             </div>
           </Link>
 
@@ -724,7 +729,7 @@ export default function CaseStudyPage() {
                   ))}
                 </div>
                 <p className="mt-5 text-lg leading-8 text-white/85">
-                  "The new case-study direction feels premium, clinically trustworthy, and much
+                  "The new introduction direction feels premium, clinically trustworthy, and much
                   closer to a real healthcare SaaS product than a generic marketing page."
                 </p>
                 <div className="mt-5 flex items-center gap-3">

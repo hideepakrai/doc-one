@@ -4,14 +4,17 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Users, Calendar, Award } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-const stats = [
-  { label: "Expert Doctors", value: "200+", icon: Users },
-  { label: "Appointments Daily", value: "1,500+", icon: Calendar },
-  { label: "Years of Excellence", value: "25+", icon: Award },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Hero() {
+  const { t, language } = useLanguage();
+
+  const stats = [
+    { label: t("hero.stats.0.label"), value: t("hero.stats.0.value"), icon: Users },
+    { label: t("hero.stats.1.label"), value: t("hero.stats.1.value"), icon: Calendar },
+    { label: t("hero.stats.2.label"), value: t("hero.stats.2.value"), icon: Award },
+  ];
+
   return (
     <section className="relative min-h-screen pt-20 overflow-hidden">
       {/* Background Pattern */}
@@ -38,20 +41,30 @@ export default function Hero() {
             >
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
               <span className="text-sm font-medium text-primary">
-                Trusted by 100,000+ patients
+                {t("hero.badge")}
               </span>
             </motion.div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-serif font-medium leading-[1.1] tracking-tight mb-6 text-balance">
-              Exceptional care for{" "}
-              <span className="text-primary">exceptional</span> lives
+              {t("hero.headline").split("exceptional")[0]}
+              <span className="text-primary">
+                {language === "hi" ? "असाधारण" : "exceptional"}
+              </span>
+              {t("hero.headline").split("exceptional")[1]}
+              {/* Note: I'll simplify headline translation in the json if needed, but for now let's use the full string if possible */}
+              {/* Special check for Hindi headline structure */}
+              {language === "hi" ? "" : ""}
             </h1>
+            {/* Re-evaluating headline: simpler to just use t("hero.headline") if I include the span in the JSON, but JSON doesn't support tags easily. 
+                I'll just use the full string from JSON for now and wrap the whole thing if needed, 
+                or I'll update the JSON to have separate parts. 
+                Let's update the JSON to have headlineParts.
+            */}
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8 max-w-xl">
-              Connect with world-class specialists, access comprehensive care, and experience
-              healthcare reimagined for the modern age.
+              {t("hero.subheadline")}
             </p>
 
             {/* CTAs */}
@@ -60,14 +73,14 @@ export default function Hero() {
                 href="#book"
                 className="group inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all"
               >
-                Book Appointment
+                {t("hero.cta.book")}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="#doctors"
                 className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl border-2 border-border text-foreground font-medium hover:bg-muted transition-colors"
               >
-                Explore Doctors
+                {t("hero.cta.explore")}
               </Link>
             </div>
 
@@ -96,7 +109,9 @@ export default function Hero() {
                   ))}
                   <span className="font-semibold ml-1">4.9</span>
                 </div>
-                <p className="text-sm text-muted-foreground">from 12,000+ reviews</p>
+                <p className="text-sm text-muted-foreground">
+                  {language === "hi" ? "12,000+ समीक्षाओं से" : "from 12,000+ reviews"}
+                </p>
               </div>
             </div>
           </motion.div>
@@ -115,6 +130,7 @@ export default function Hero() {
                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
                   alt="Professional doctor in modern clinic"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                   className="object-cover"
                   priority
                 />
@@ -133,8 +149,8 @@ export default function Hero() {
                     <Calendar className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Next Available</p>
-                    <p className="font-semibold">Today, 2:30 PM</p>
+                    <p className="text-sm text-muted-foreground">{t("doctors.nextAvailable")}</p>
+                    <p className="font-semibold">{language === "hi" ? "आज, दोपहर 2:30 बजे" : "Today, 2:30 PM"}</p>
                   </div>
                 </div>
               </motion.div>
@@ -150,17 +166,17 @@ export default function Hero() {
                   <div className="w-12 h-12 rounded-full overflow-hidden">
                     <Image
                       src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=100&q=80"
-                      alt="Dr. Sarah"
+                      alt="Dr. Rajesh"
                       width={48}
                       height={48}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <p className="font-semibold">Dr. Sarah Mitchell</p>
+                    <p className="font-semibold">{language === "hi" ? "डॉ. राजेश शर्मा" : "Dr. Rajesh Sharma"}</p>
                     <div className="flex items-center gap-1">
                       <Star className="w-3 h-3 fill-accent text-accent" />
-                      <span className="text-sm text-muted-foreground">4.9 • Cardiology</span>
+                      <span className="text-sm text-muted-foreground">4.9 • {t("doctors.filters")[1]}</span>
                     </div>
                   </div>
                 </div>

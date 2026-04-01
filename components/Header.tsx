@@ -17,30 +17,33 @@ import {
   Eye,
   HeartPulse,
   Shield,
+  Languages,
 } from "lucide-react";
 import Link from "next/link";
-
-const specializations = [
-  { name: "Cardiology", icon: HeartPulse, description: "Heart & cardiovascular care" },
-  { name: "Neurology", icon: Brain, description: "Brain & nervous system" },
-  { name: "Pediatrics", icon: Baby, description: "Children's health" },
-  { name: "Orthopedics", icon: Bone, description: "Bones & joints" },
-  { name: "Ophthalmology", icon: Eye, description: "Eye care & vision" },
-  { name: "General Medicine", icon: Stethoscope, description: "Primary healthcare" },
-];
-
-const navLinks = [
-  { name: "Specializations", href: "#specializations", hasMega: true },
-  { name: "Our Doctors", href: "#doctors", hasMega: false },
-  { name: "Services", href: "#services", hasMega: false },
-  { name: "About Us", href: "#about", hasMega: false },
-  { name: "Contact", href: "#contact", hasMega: false },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+
+  const specializations = [
+    { name: t("doctors.filters")[1], icon: HeartPulse, description: "Heart & cardiovascular care" },
+    { name: t("doctors.filters")[2], icon: Brain, description: "Brain & nervous system" },
+    { name: t("doctors.filters")[3], icon: Baby, description: "Children's health" },
+    { name: t("doctors.filters")[4], icon: Bone, description: "Bones & joints" },
+    { name: "Ophthalmology", icon: Eye, description: "Eye care & vision" },
+    { name: "General Medicine", icon: Stethoscope, description: "Primary healthcare" },
+  ];
+
+  const navLinks = [
+    { name: t("header.nav.specializations"), href: "#specializations", hasMega: true },
+    { name: t("header.nav.doctors"), href: "#doctors", hasMega: false },
+    { name: t("header.nav.services"), href: "#services", hasMega: false },
+    { name: t("header.nav.about"), href: "#about", hasMega: false },
+    { name: t("header.nav.contact"), href: "#contact", hasMega: false },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
@@ -52,7 +55,7 @@ export default function Header() {
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-semibold tracking-tight text-foreground">
-              Medi<span className="text-primary">Care</span>
+              {t("header.logo")}<span className="text-primary">{t("header.logoSuffix")}</span>
             </span>
           </Link>
 
@@ -121,6 +124,15 @@ export default function Header() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <button
+              onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-muted text-sm font-medium hover:bg-muted/80 transition-colors mr-2"
+            >
+              <Languages className="w-4 h-4" />
+              <span>{language === "en" ? "हिंदी" : "English"}</span>
+            </button>
+
             {/* Search */}
             <div className="relative hidden sm:block">
               <AnimatePresence>
@@ -133,7 +145,7 @@ export default function Header() {
                   >
                     <input
                       type="text"
-                      placeholder="Search doctors, specializations..."
+                      placeholder={t("header.searchPlaceholder")}
                       className="w-full h-10 pl-10 pr-4 rounded-xl bg-muted border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                       autoFocus
                     />
@@ -177,7 +189,7 @@ export default function Header() {
               className="hidden md:flex items-center gap-2 h-10 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               <Calendar className="w-4 h-4" />
-              Book Appointment
+              {t("header.book")}
             </Link>
 
             {/* Mobile Menu Toggle */}
@@ -209,7 +221,7 @@ export default function Header() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search doctors, specializations..."
+                  placeholder={t("header.searchPlaceholder")}
                   className="w-full h-12 pl-12 pr-4 rounded-xl bg-muted border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -234,7 +246,7 @@ export default function Header() {
               <div className="flex gap-3 pt-4 border-t border-border">
                 <button className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-muted text-foreground font-medium hover:bg-muted/80 transition-colors">
                   <User className="w-5 h-5" />
-                  Sign In
+                  {t("header.signIn")}
                 </button>
                 <Link
                   href="#book"
@@ -242,7 +254,7 @@ export default function Header() {
                   className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Calendar className="w-5 h-5" />
-                  Book Now
+                  {t("header.book")}
                 </Link>
               </div>
             </div>
