@@ -1,24 +1,39 @@
 import { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-export async function isAdmin(request: NextRequest) {
+export type AuthRole = "admin" | "doctor" | "patient";
+
+export async function getAuthContext(request: NextRequest): Promise<{ authenticated: boolean; role?: AuthRole; payload?: any }> {
   const token = request.cookies.get('admin_token')?.value;
 
   if (!token) {
-    return false;
+    return { authenticated: false };
   }
 
   try {
     const secretText = process.env.JWT_SECRET || 'fallback_secret_for_dev';
     const secret = new TextEncoder().encode(secretText);
 
-    // Verify the JWT
-    await jwtVerify(token, secret);
-    return true;
+    const { payload } = await jwtVerify(token, secret);
+    return {
+      authenticated: true,
+      role: payload.role as AuthRole | undefined,
+      payload,
+    };
   } catch (error) {
     console.warn("API Auth failed:", error);
-    return false;
+    return { authenticated: false };
   }
+}
+
+export async function isAdmin(request: NextRequest) {
+  const auth = await getAuthContext(request);
+  return auth.authenticated && auth.role === "admin";
+}
+
+export async function hasRole(request: NextRequest, roles: AuthRole[]) {
+  const auth = await getAuthContext(request);
+  return auth.authenticated && !!auth.role && roles.includes(auth.role);
 }
 
 /**

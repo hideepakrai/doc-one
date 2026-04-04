@@ -18,7 +18,7 @@ export default function Testimonials() {
       image: "https://i.pravatar.cc/150?img=1",
       rating: 5,
       text: language === "hi" 
-        ? "मेडीकेयर मल्टी-स्पेशलिटी क्लिनिक में मुझे जो देखभाल मिली वह असाधारण थी। डॉ. शर्मा ने हर चीज को अच्छी तरह से समझाने के लिए समय निकाला और मुझे पूरी तरह से सहज महसूस कराया।" 
+        ? "मेडीकेयर मल्टी-स्पेशलिटी क्लीनिक में मुझे जो देखभाल मिली वह असाधारण थी। डॉ. शर्मा ने हर चीज को अच्छी तरह से समझाने के लिए समय निकाला और मुझे पूरी तरह से सहज महसूस कराया।" 
         : "The level of care I received at MediCare Multi-Speciality Clinic was exceptional. Dr. Sharma took the time to explain everything thoroughly and made me feel completely at ease.",
       specialty: t("doctors.filters")[1],
       doctor: language === "hi" ? "डॉ. राजेश शर्मा" : "Dr. Rajesh Sharma",
@@ -30,7 +30,7 @@ export default function Testimonials() {
       image: "https://i.pravatar.cc/150?img=3",
       rating: 5,
       text: language === "hi" 
-        ? "मैं वीडियो परामर्श को लेकर संशय में था, लेकिन मेडीकेयर क्लिनिक ने मेरा विचार बदल दिया। गुणवत्ता उत्कृष्ट थी और डॉ. अय्यर अविश्वसनीय रूप से पेशेवर थे।" 
+        ? "मैं वीडियो परामर्श को लेकर संशय में था, लेकिन मेडीकेयर क्लीनिक ने मेरा विचार बदल दिया। गुणवत्ता उत्कृष्ट थी और डॉ. अय्यर अविश्वसनीय रूप से पेशेवर थे।" 
         : "I was skeptical about video consultations, but MediCare Clinic changed my mind. The quality was excellent, and Dr. Iyer was incredibly professional.",
       specialty: t("doctors.filters")[2],
       doctor: language === "hi" ? "डॉ. अनन्या अय्यर" : "Dr. Ananya Iyer",
@@ -38,11 +38,11 @@ export default function Testimonials() {
     {
       id: 3,
       name: language === "hi" ? "प्रिया सिंह" : "Priya Singh",
-      role: language === "hi" ? "स्कूल शिक्षिका" : "School Teacher",
+      role: language === "hi" ? "शिक्षिका" : "Teacher",
       image: "https://i.pravatar.cc/150?img=5",
       rating: 5,
       text: language === "hi" 
-        ? "एक माँ के रूप में, गुणवत्तापूर्ण बाल रोग देखभाल ढूँढना महत्वपूर्ण है। डॉ. गुप्ता और उनकी टीम मेरे बच्चों के साथ बहुत अच्छी रही है।" 
+        ? "एक माँ के रूप में, गुणवत्तापूर्ण बाल चिकित्सा देखभाल ढूँढना महत्वपूर्ण है। डॉ. गुप्ता और उनकी टीम मेरे बच्चों के साथ बहुत अच्छी रही है।" 
         : "As a mother, finding quality pediatric care is crucial. Dr. Gupta and her team have been wonderful with my children.",
       specialty: t("doctors.filters")[3],
       doctor: language === "hi" ? "डॉ. सुनीता गुप्ता" : "Dr. Sunita Gupta",
@@ -69,14 +69,14 @@ export default function Testimonials() {
           className="text-center mb-16"
         >
           <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            {language === "hi" ? "मरीजों की कहानियाँ" : "Patient Stories"}
+            {language === "hi" ? "मरीजों की कहानियां" : "Patient Stories"}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium mb-6 text-balance">
             {language === "hi" ? "हमारे मरीज क्या कहते हैं" : "What our patients say"}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {language === "hi" 
-              ? "उन वास्तविक मरीजों के वास्तविक अनुभव जिन्होंने अपनी स्वास्थ्य संबंधी जरूरतों के लिए हम पर भरोसा किया है।" 
+              ? "उन वास्तविक मरीजों के वास्तविक अनुभव जिन्होंने अपनी स्वास्थ्य संबंधी आवश्यकताओं के लिए हम पर भरोसा किया है।" 
               : "Real experiences from real patients who have trusted us with their healthcare needs."}
           </p>
         </motion.div>
@@ -119,7 +119,7 @@ export default function Testimonials() {
                 </div>
 
                 {/* Quote */}
-                <blockquote className="text-xl sm:text-2xl leading-relaxed text-foreground mb-8">
+                <blockquote className="text-xl sm:text-2xl leading-relaxed text-foreground mb-8 text-balance">
                   {`"${testimonials[currentIndex].text}"`}
                 </blockquote>
 
@@ -147,7 +147,7 @@ export default function Testimonials() {
                     <Star className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">{language === "hi" ? "इलाज किया गया" : "Treated by"}</p>
+                    <p className="text-sm text-muted-foreground">{language === "hi" ? "इलाज किया" : "Treated by"}</p>
                     <p className="font-medium">
                       {testimonials[currentIndex].doctor} •{" "}
                       {testimonials[currentIndex].specialty}

@@ -10,6 +10,11 @@ export interface IDoctor extends Document {
   availabilityStatus: "Available" | "Busy";
   nextAvailable: string;
   image: string;
+  isFeatured: boolean;
+  workingDays?: string;
+  timeSlots?: string;
+  breakTime?: string;
+  blockedSlots?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,7 +49,7 @@ const DoctorSchema = new Schema(
     },
     availabilityStatus: {
       type: String,
-      enum: ["Available", "Busy"],
+      enum: ["Available", "Busy", "On Leave"],
       default: "Available",
     },
     nextAvailable: {
@@ -54,6 +59,26 @@ const DoctorSchema = new Schema(
     image: {
       type: String,
       default: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=600&q=80",
+    },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    workingDays: {
+      type: String,
+      default: "Mon-Sat",
+    },
+    timeSlots: {
+      type: String,
+      default: "09:00 AM - 05:00 PM",
+    },
+    breakTime: {
+      type: String,
+      default: "01:00 PM - 02:00 PM",
+    },
+    blockedSlots: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AppointmentService } from "@/services/appointment.service";
-import { isAdmin } from "@/lib/auth";
+import { getAuthContext, hasRole, isAdmin } from "@/lib/auth";
 import { isRateLimited } from "@/lib/rate-limit";
 
 export async function GET(req: NextRequest) {
   try {
-    // Admin only
-    if (!(await isAdmin(req))) {
+    const auth = await getAuthContext(req);
+    if (!auth.authenticated || !(await hasRole(req, ["admin", "doctor"]))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -16,13 +16,16 @@ export async function GET(req: NextRequest) {
     const date = searchParams.get("date") || undefined;
     const status = (searchParams.get("status") as any) || undefined;
     const doctorId = searchParams.get("doctorId") || undefined;
+    const search = searchParams.get("search") || undefined;
+    const effectiveDoctorId = auth.role === "doctor" ? auth.payload?.doctorId?.toString?.() : doctorId;
 
     const result = await AppointmentService.getAppointments({
       page,
       limit,
       date,
       status,
-      doctorId,
+      doctorId: effectiveDoctorId,
+      search,
     });
 
     return NextResponse.json(result, { status: 200 });
@@ -43,7 +46,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     
     // Create appointment with service (includes validation)
-    const newAppointment = await AppointmentService.createAppointment(body);
+    const newAppointment = await AppointmentService.createAppointment({
+      ...body,
+      status: "Pending",
+    });
     
     return NextResponse.json(newAppointment, { status: 201 });
   } catch (error: any) {

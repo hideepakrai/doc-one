@@ -1,211 +1,150 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Video,
-  Calendar,
-  FileText,
-  Clock,
-  Shield,
-  Smartphone,
-  ArrowRight,
-  Check,
+import { 
+  Heart, Brain, Baby, Activity, Eye, ShieldCheck, 
+  Stethoscope, Microscope, Search, ArrowRight 
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import * as Icons from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
+import { useState, useEffect } from "react";
 
 export default function Services() {
   const { t, language } = useLanguage();
+  const [services, setServices] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const services = [
-    {
-      title: language === "hi" ? "वीडियो परामर्श" : "Video Consultations",
-      description: language === "hi" 
-        ? "सुरक्षित, उच्च गुणवत्ता वाले वीडियो कॉल के माध्यम से अपने घर के आराम से विशेषज्ञों से जुड़ें।" 
-        : "Connect with specialists from the comfort of your home through secure, high-quality video calls.",
-      icon: Video,
-      features: language === "hi" 
-        ? ["HD वीडियो गुणवत्ता", "स्क्रीन शेयरिंग", "सत्र रिकॉर्ड करें"] 
-        : ["HD video quality", "Screen sharing", "Record sessions"],
-    },
-    {
-      title: language === "hi" ? "आसान शेड्यूलिंग" : "Easy Scheduling",
-      description: language === "hi" 
-        ? "वास्तविक समय की उपलब्धता और तत्काल पुष्टीकरण के साथ 24/7 ऑनलाइन अपॉइंटमेंट बुक करें।" 
-        : "Book appointments online 24/7 with real-time availability and instant confirmations.",
-      icon: Calendar,
-      features: language === "hi" 
-        ? ["रियल-टाइम स्लॉट", "SMS रिमाइंडर", "आसान रिशेड्यूलिंग"] 
-        : ["Real-time slots", "SMS reminders", "Easy rescheduling"],
-    },
-    {
-      title: language === "hi" ? "डिजिटल स्वास्थ्य रिकॉर्ड" : "Digital Health Records",
-      description: language === "hi" 
-        ? "किसी भी समय अपने संपूर्ण चिकित्सा इतिहास, नुस्खे और परीक्षण परिणामों तक पहुंचें।" 
-        : "Access your complete medical history, prescriptions, and test results anytime.",
-      icon: FileText,
-      features: language === "hi" 
-        ? ["सुरक्षित भंडारण", "डॉक्टरों के साथ साझा करें", "रिपोर्ट डाउनलोड करें"] 
-        : ["Secure storage", "Share with doctors", "Download reports"],
-    },
-    {
-      title: language === "hi" ? "24/7 देखभाल सहायता" : "24/7 Care Support",
-      description: language === "hi" 
-        ? "हमारी चिकित्सा टीम तत्काल परामर्श और सलाह के लिए चौबीसों घंटे उपलब्ध है।" 
-        : "Our medical team is available around the clock for urgent consultations and advice.",
-      icon: Clock,
-      features: language === "hi" 
-        ? ["आपातकालीन सहायता", "नर्स हेल्पलाइन", "त्वरित प्रतिक्रिया"] 
-        : ["Emergency support", "Nurse helpline", "Quick response"],
-    },
+  useEffect(() => {
+    async function fetchServices() {
+        try {
+            const res = await fetch("/api/specializations");
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                setServices(data.slice(0, 4)); // Only show top 4 services on homepage grid
+            }
+        } catch (err) {
+            console.error("Failed to fetch services:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    fetchServices();
+  }, []);
+
+  const colorPalette = [
+    { bg: "bg-red-500/10", text: "text-red-600" },
+    { bg: "bg-blue-500/10", text: "text-blue-600" },
+    { bg: "bg-pink-500/10", text: "text-pink-600" },
+    { bg: "bg-amber-500/10", text: "text-amber-600" },
+    { bg: "bg-emerald-500/10", text: "text-emerald-600" },
   ];
 
   const benefits = [
-    {
-      icon: Shield,
-      title: language === "hi" ? "NABH प्रमाणित" : "NABH Accredited",
-      description: language === "hi" 
-        ? "आपका डेटा एंटरप्राइज़-ग्रेड सुरक्षा के साथ सुरक्षित है" 
-        : "Your data is protected with enterprise-grade security",
+    { 
+        title: language === "hi" ? "24/7 आपातकालीन सेवा" : "24/7 Emergency Care", 
+        desc: language === "hi" ? "हमेशा आपकी सेवा के लिए तैयार।" : "Advanced trauma care available around the clock.",
+        icon: Stethoscope
     },
-    {
-      icon: Smartphone,
-      title: language === "hi" ? "मोबाइल ऐप" : "Mobile App",
-      description: language === "hi" 
-        ? "हमारे iOS और Android ऐप्स के साथ चलते-फिरते अपने स्वास्थ्य का प्रबंधन करें" 
-        : "Manage your health on the go with our iOS and Android apps",
+    { 
+        title: language === "hi" ? "आधुनिक लैब" : "Modern Diagnostic Lab", 
+        desc: language === "hi" ? "सटीक और तेज़ परिणाम।" : "Equipped with the latest automated diagnostic technology.",
+        icon: Microscope
     },
+    { 
+        title: language === "hi" ? "विशेषज्ञ डॉक्टर" : "Qualified Specialists", 
+        desc: language === "hi" ? "दशकों का सामूहिक अनुभव।" : "Our team brings decades of combined clinical experience.",
+        icon: ShieldCheck
+    }
   ];
 
   return (
-    <section id="services" className="py-24 bg-muted/30">
+    <section id="services" className="py-24 bg-muted/20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            {language === "hi" ? "हमारी सेवाएँ" : "Our Services"}
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium mb-6 text-balance">
-            {language === "hi" ? "स्वास्थ्य सेवा अब और भी आसान" : "Healthcare made simple"}
+        <div className="text-center mb-20">
+          <motion.span 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-widest mb-4 border border-primary/20"
+          >
+            {language === "hi" ? "विश्व स्तरीय सेवाएं" : "World-Class Services"}
+          </motion.span>
+          <h2 className="text-4xl sm:text-5xl font-serif font-medium mb-6 leading-tight">
+            {language === "hi" ? "आपकी भलाई हमारी प्राथमिकता" : "Your wellbeing is our priority"}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {language === "hi" 
-              ? "आपकी यात्रा को निर्बाध और तनाव मुक्त बनाने के लिए डिज़ाइन की गई हमारी व्यापक डिजिटल सेवाओं के साथ आधुनिक स्वास्थ्य सेवा का अनुभव करें।" 
-              : "Experience modern healthcare with our comprehensive digital services designed to make your journey seamless and stress-free."}
+              ? "हम आधुनिक तकनीक और दयालु देखभाल के साथ व्यापक स्वास्थ्य सेवाएं प्रदान करते हैं।" 
+              : "We provide comprehensive medical services using modern technology and compassionate care across various specialities."}
           </p>
-        </motion.div>
-
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-16">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group bg-card rounded-2xl border border-border p-8 hover:shadow-lg transition-all duration-300"
-            >
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="w-8 h-8 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">{service.description}</p>
-                  <ul className="flex flex-wrap gap-3">
-                    {service.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground"
-                      >
-                        <Check className="w-4 h-4 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
-          ))}
         </div>
 
-        {/* Benefits Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden"
-        >
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1920&q=80"
-              alt="Modern healthcare facility"
-              fill
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-primary/90" />
-          </div>
-
-          <div className="relative px-8 py-16 sm:p-16">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h3 className="text-3xl sm:text-4xl font-serif font-medium text-primary-foreground mb-6">
-                  {language === "hi" 
-                    ? "आपका स्वास्थ्य डेटा, सुरक्षित और सुलभ" 
-                    : "Your health data, protected and accessible"}
-                </h3>
-                <p className="text-primary-foreground/80 text-lg mb-8">
-                  {language === "hi" 
-                    ? "हम आपकी गोपनीयता को प्राथमिकता देते हैं और यह सुनिश्चित करते हैं कि आपकी स्वास्थ्य जानकारी पर आपका पूरा नियंत्रण हो।" 
-                    : "We prioritize your privacy while ensuring you have complete control over your health information. Access your records anytime, anywhere."}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    href="#learn-more"
-                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-background text-foreground font-medium hover:bg-background/90 transition-colors"
-                  >
-                    {language === "hi" ? "और जानें" : "Learn More"}
-                    <ArrowRight className="w-5 h-5" />
-                  </Link>
-                  <Link
-                    href="#download"
-                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl border-2 border-primary-foreground/30 text-primary-foreground font-medium hover:bg-primary-foreground/10 transition-colors"
-                  >
-                    {language === "hi" ? "ऐप डाउनलोड करें" : "Download App"}
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-6">
-                {benefits.map((benefit) => (
-                  <div
-                    key={benefit.title}
-                    className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-6 border border-primary-foreground/20"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-primary-foreground/20 flex items-center justify-center mb-4">
-                      <benefit.icon className="w-6 h-6 text-primary-foreground" />
-                    </div>
-                    <h4 className="text-lg font-semibold text-primary-foreground mb-2">
-                      {benefit.title}
-                    </h4>
-                    <p className="text-primary-foreground/70 text-sm">{benefit.description}</p>
-                  </div>
+        {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+                {[...Array(4)].map((_, i) => (
+                    <div key={i} className="h-[400px] bg-card/60 animate-pulse rounded-[2.5rem] border border-border/50" />
                 ))}
-              </div>
             </div>
-          </div>
-        </motion.div>
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            {services.map((service, index) => {
+                const IconComponent = (Icons as any)[service.icon] || Icons.Heart;
+                const colors = colorPalette[index % colorPalette.length];
+                return (
+                    <motion.div
+                    key={service._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -10 }}
+                    className="bg-card p-10 rounded-[2.5rem] border border-border/50 shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 group flex flex-col h-full"
+                    >
+                    <div className={`w-16 h-16 rounded-2xl ${colors.bg} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner`}>
+                        <IconComponent className={`w-8 h-8 ${colors.text}`} strokeWidth={2.5} />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4 tracking-tight group-hover:text-primary transition-colors">{service.name}</h3>
+                    <p className="text-muted-foreground text-sm font-medium mb-8 leading-relaxed flex-1 italic opacity-80">
+                        "{service.description}"
+                    </p>
+                    <ul className="space-y-4 mb-8">
+                        {(service.features && service.features.length > 0 ? service.features : 
+                           (language === "hi" ? ["24/7 सहायता", "सटीक डायग्नोस्टिक्स", "विशेषज्ञ टीम"] : ["24/7 Clinical Support", "SLA Certified Performance", "Specialized Care Teams"]))
+                                .slice(0, 3).map((feature: string) => (
+                        <li key={feature} className="flex items-start gap-3 group/item">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/item:bg-primary transition-colors" />
+                            <span className="text-sm font-bold text-foreground/70">{feature}</span>
+                        </li>
+                        ))}
+                    </ul>
+                    <motion.button className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary group/btn mt-auto">
+                        {language === "hi" ? "विवरण देखें" : "View Details"}
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1.5 transition-transform" strokeWidth={3} />
+                    </motion.button>
+                    </motion.div>
+                );
+            })}
+            </div>
+        )}
+
+        {/* Improved Clinical Trust Area */}
+        <div className="pt-20 border-t border-border/50">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {benefits.map((benefit, idx) => (
+                <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    className="flex flex-col items-center text-center p-8 rounded-[2.5rem] hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all duration-500 group"
+                >
+                    <div className="w-14 h-14 rounded-2xl bg-white border border-border/50 flex items-center justify-center mb-6 shadow-sm group-hover:border-primary/30 transition-all rotate-3 group-hover:rotate-0">
+                        <benefit.icon className="w-7 h-7 text-primary/60 group-hover:text-primary transition-all" />
+                    </div>
+                    <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-3 text-foreground/80">{benefit.title}</h4>
+                    <p className="text-sm text-muted-foreground font-medium leading-relaxed max-w-[200px]">{benefit.desc}</p>
+                </motion.div>
+              ))}
+           </div>
+        </div>
       </div>
     </section>
   );

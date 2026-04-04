@@ -11,12 +11,19 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "100"); // Standard high limit for user view unless paginated UI
     const search = searchParams.get("search") || undefined;
     const specialization = searchParams.get("specialization") || undefined;
+    const status = searchParams.get("status") || undefined;
+    const isFeatured = searchParams.get("isFeatured") === "true" ? true : 
+                        searchParams.get("isFeatured") === "false" ? false : undefined;
+    const sortBy = searchParams.get("sortBy") || undefined;
 
     const result = await DoctorService.getDoctors({
       page,
       limit,
       search,
       specialization,
+      status,
+      isFeatured,
+      sortBy,
     });
 
     return NextResponse.json(result, { status: 200 });

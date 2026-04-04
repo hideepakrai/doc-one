@@ -14,8 +14,13 @@
     "signIn": "Sign In"
   },
   "hero": {
-    "badge": "Trusted by 100,000+ patients in Delhi",
-    "headline": "Exceptional care for the heart of Delhi",
+    "badge": "Leading the way in medical excellence",
+    "headline": "Exceptional care for exceptional lives",
+    "headlineParts": {
+        "prefix": "Exceptional care for ",
+        "highlight": "exceptional",
+        "suffix": " lives"
+    },
     "subheadline": "Connect with North India's top specialists, access comprehensive care, and experience healthcare reimagined for the modern age.",
     "cta": {
       "book": "Book Appointment",
@@ -31,7 +36,7 @@
     "badge": "Our Team",
     "headline": "Meet our expert doctors",
     "subheadline": "Our team of board-certified physicians brings decades of combined experience to provide you with the best possible care.",
-    "filters": ["All", "Cardiology", "Neurology", "Pediatrics", "Orthopedics"],
+    "filters": ["All", "Cardiology", "Neurology", "Pediatrics", "Orthopedics", "Ophthalmology", "General Medicine"],
     "viewProfile": "View Profile",
     "bookNow": "Book Now",
     "viewAll": "View All Doctors",
@@ -42,6 +47,55 @@
     "description": "Premium multi-speciality healthcare center providing world-class medical services in the heart of New Delhi.",
     "address": "12, Palam Road, Vasant Vihar, New Delhi 110057",
     "phone": "+91-11-2614-XXXX",
-    "copyright": "© 2026 MediCare Multi-Speciality Clinic. All rights reserved."
+    "email": "care@medicareclinic.com",
+    "copyright": "© 2026 MediCare Multi-Speciality Clinic. All rights reserved.",
+    "about": {
+        "title": "About MediCare Clinic",
+        "description": "Our heritage of care and commitment to healthcare excellence in the heart of the community.",
+        "introduction": "MediCare Multi-Speciality Clinic was founded with a single mission: to provide the highest quality medical care using cutting-edge technology while maintaining the compassion of a family-run practice. For over 15 years, we have been at the forefront of healthcare in the region.",
+        "mission": {
+            "title": "Our Mission",
+            "text": "To deliver accessible, high-quality, and cost-effective healthcare through clinical excellence and compassionate service."
+        },
+        "vision": {
+            "title": "Our Vision",
+            "text": "To be the region's preferred healthcare destination, recognized for clinical outcomes and exceptional patient experience."
+        },
+        "whyChooseUs": {
+            "title": "Why Choose Us?",
+            "items": [
+                { "title": "Expert Specialists", "desc": "Board-certified doctors with decades of combined experience." },
+                { "title": "Advanced Technology", "desc": "Equipped with state-of-the-art diagnostic and surgical equipment." },
+                { "title": "Compassionate Care", "desc": "A patient-first approach that ensures comfort and trust." },
+                { "title": "Comprehensive Services", "desc": "A wide range of specializations all under one roof." }
+            ]
+        }
+    }
+  },
+  "specializationPages": {
+    "cardiology": {
+      "title": "Advanced Cardiology",
+      "description": "Comprehensive heart care including diagnostic, interventional, and preventive cardiac services."
+    },
+    "neurology": {
+      "title": "Expert Neurology",
+      "description": "Specialized treatment for disorders of the brain, spinal cord, and peripheral nerves."
+    },
+    "pediatrics": {
+      "title": "Pediatric Excellence",
+      "description": "Comprehensive healthcare for infants, children, and adolescents in a warm, friendly environment."
+    },
+    "orthopedics": {
+      "title": "Orthopedic Surgery",
+      "description": "Expert care for musculoskeletal injuries, joint replacements, and sports medicine."
+    },
+    "ophthalmology": {
+      "title": "Ophthalmology Care",
+      "description": "Advanced eye care services focusing on vision preservation and surgical treatments."
+    },
+    "general-medicine": {
+      "title": "General Medicine",
+      "description": "Primary healthcare and comprehensive management of adult health conditions."
+    }
   }
 }

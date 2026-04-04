@@ -5,31 +5,43 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /admin routes
+  const token = request.cookies.get('admin_token')?.value;
+
   if (pathname.startsWith('/admin')) {
-    // Exempt the login page gracefully
-    if (pathname === '/admin/login') {
-      return NextResponse.next();
-    }
-
-    const token = request.cookies.get('admin_token')?.value;
-
+    if (pathname === '/admin/login') return NextResponse.next();
     if (!token) {
       const url = request.nextUrl.clone();
       url.pathname = '/admin/login';
       return NextResponse.redirect(url);
     }
+  }
 
+  if (pathname.startsWith('/doctor')) {
+    if (pathname === '/doctor/login') return NextResponse.next();
+    if (!token) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/doctor/login';
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (token && (pathname.startsWith('/admin') || pathname.startsWith('/doctor'))) {
     try {
       const secretText = process.env.JWT_SECRET || 'fallback_secret_for_dev';
       const secret = new TextEncoder().encode(secretText);
-
-      // Verify the JWT is valid
-      await jwtVerify(token, secret);
+      const { payload } = await jwtVerify(token, secret);
+      if (pathname.startsWith('/admin') && payload.role !== "admin") {
+        const url = request.nextUrl.clone();
+        url.pathname = '/doctor/dashboard';
+        return NextResponse.redirect(url);
+      }
+      if (pathname.startsWith('/doctor') && payload.role !== "doctor") {
+        const url = request.nextUrl.clone();
+        url.pathname = '/admin/login';
+        return NextResponse.redirect(url);
+      }
       return NextResponse.next();
     } catch (error) {
-      console.warn("Invalid or expired edge token blocked:", error);
-      // Clear invalid cookie & redirect
       const url = request.nextUrl.clone();
       url.pathname = '/admin/login';
       const response = NextResponse.redirect(url);
@@ -42,5 +54,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/doctor/:path*'],
 };

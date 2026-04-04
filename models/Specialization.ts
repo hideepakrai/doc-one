@@ -4,7 +4,7 @@ export interface ISpecialization extends Document {
   name: string;
   description: string;
   icon: string;
-  doctorCount: number;
+  features: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,6 +24,10 @@ const SpecializationSchema = new Schema(
     icon: {
       type: String,
       default: "Stethoscope",
+    },
+    features: {
+      type: [String],
+      default: [],
     },
     doctorCount: {
       type: Number,

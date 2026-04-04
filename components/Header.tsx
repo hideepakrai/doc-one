@@ -1,259 +1,181 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
   Menu,
   X,
-  ChevronDown,
-  Heart,
-  Calendar,
-  User,
-  Stethoscope,
-  Brain,
-  Baby,
-  Bone,
-  Eye,
-  HeartPulse,
   Shield,
-  Languages,
+  Search,
+  Calendar,
+  Globe,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const { language, setLanguage, t } = useLanguage();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, language, setLanguage } = useLanguage();
+  const pathname = usePathname();
 
-  const specializations = [
-    { name: t("doctors.filters")[1], icon: HeartPulse, description: "Heart & cardiovascular care" },
-    { name: t("doctors.filters")[2], icon: Brain, description: "Brain & nervous system" },
-    { name: t("doctors.filters")[3], icon: Baby, description: "Children's health" },
-    { name: t("doctors.filters")[4], icon: Bone, description: "Bones & joints" },
-    { name: "Ophthalmology", icon: Eye, description: "Eye care & vision" },
-    { name: "General Medicine", icon: Stethoscope, description: "Primary healthcare" },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
-    { name: t("header.nav.specializations"), href: "#specializations", hasMega: true },
-    { name: t("header.nav.doctors"), href: "#doctors", hasMega: false },
-    { name: t("header.nav.services"), href: "#services", hasMega: false },
-    { name: t("header.nav.about"), href: "#about", hasMega: false },
-    { name: t("header.nav.contact"), href: "#contact", hasMega: false },
+    { name: t("header.nav.specializations"), href: "/specializations" },
+    { name: t("header.nav.doctors"), href: "/doctors" },
+    { name: t("header.nav.services"), href: "/services" },
+    { name: t("header.nav.about"), href: "/about" },
+    { name: t("header.nav.contact"), href: "/contact" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? "bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.08)] py-4"
+          : "bg-transparent py-7"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <Shield className="w-5 h-5 text-primary-foreground" />
+        <div className="flex items-center justify-between gap-10 lg:gap-14">
+          {/* Enhanced Logo */}
+          <Link href="/" className="flex items-center gap-3.5 group relative">
+            <div className="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center shadow-xl shadow-primary/20 group-hover:rotate-6 transition-all duration-500">
+              <Shield className="w-6.5 h-6.5 text-white" strokeWidth={2.5} />
             </div>
-            <span className="text-xl font-semibold tracking-tight text-foreground">
-              {t("header.logo")}<span className="text-primary">{t("header.logoSuffix")}</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-black tracking-tight text-foreground leading-none">
+                {t("header.logo")}
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 mt-1 leading-none">
+                {t("header.logoSuffix")}
+              </span>
+            </div>
+            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-500" />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-10 ml-10 xl:ml-14">
             {navLinks.map((link) => (
-              <div
+              <Link
                 key={link.name}
-                className="relative"
-                onMouseEnter={() => link.hasMega && setMegaMenuOpen(true)}
-                onMouseLeave={() => link.hasMega && setMegaMenuOpen(false)}
+                href={link.href}
+                className={`group relative text-[13px] font-black uppercase tracking-[0.15em] transition-all hover:text-primary ${
+                  pathname === link.href ? "text-primary" : "text-foreground/70"
+                }`}
               >
-                <Link
-                  href={link.href}
-                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
-                >
-                  {link.name}
-                  {link.hasMega && <ChevronDown className="w-4 h-4" />}
-                </Link>
-
-                {/* Mega Menu */}
-                {link.hasMega && (
-                  <AnimatePresence>
-                    {megaMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
-                      >
-                        <div className="bg-card rounded-2xl shadow-2xl border border-border p-6 w-[600px]">
-                          <div className="grid grid-cols-2 gap-3">
-                            {specializations.map((spec) => (
-                              <Link
-                                key={spec.name}
-                                href={`#${spec.name.toLowerCase()}`}
-                                className="flex items-center gap-4 p-3 rounded-xl hover:bg-muted transition-colors group"
-                              >
-                                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                  <spec.icon className="w-6 h-6 text-primary" />
-                                </div>
-                                <div>
-                                  <p className="font-medium text-foreground">{spec.name}</p>
-                                  <p className="text-sm text-muted-foreground">{spec.description}</p>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                          <div className="mt-4 pt-4 border-t border-border">
-                            <Link
-                              href="#all-specializations"
-                              className="text-sm font-medium text-primary hover:underline"
-                            >
-                              View all specializations
-                            </Link>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-              </div>
+                {link.name}
+                <span className={`absolute -bottom-1.5 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                  pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
+                }`} />
+              </Link>
             ))}
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2">
-            {/* Language Switcher */}
-            <button
-              onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-muted text-sm font-medium hover:bg-muted/80 transition-colors mr-2"
-            >
-              <Languages className="w-4 h-4" />
-              <span>{language === "en" ? "हिंदी" : "English"}</span>
-            </button>
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="flex items-center gap-3 pr-6 border-r border-border/50">
+              {/* Language Switcher */}
+              <div className="relative group mr-2">
+                <button 
+                  className="flex items-center gap-2 h-10 px-3 rounded-xl hover:bg-muted transition-colors text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-primary"
+                >
+                  <Globe className="w-4 h-4" />
+                  {language === "hi" ? "HINDI" : "ENGLISH"}
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                <div className="absolute top-full right-0 mt-2 w-32 bg-white rounded-xl shadow-2xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2 z-50">
+                   <button 
+                    onClick={() => setLanguage("en")}
+                    className={`w-full text-left px-4 py-2 text-xs font-bold hover:bg-primary/5 hover:text-primary ${language === "en" ? "text-primary bg-primary/5" : "text-muted-foreground"}`}
+                   >
+                     English
+                   </button>
+                   <button 
+                    onClick={() => setLanguage("hi")}
+                    className={`w-full text-left px-4 py-2 text-xs font-bold hover:bg-primary/5 hover:text-primary ${language === "hi" ? "text-primary bg-primary/5" : "text-muted-foreground"}`}
+                   >
+                     हिन्दी (Hindi)
+                   </button>
+                </div>
+              </div>
 
-            {/* Search */}
-            <div className="relative hidden sm:block">
-              <AnimatePresence>
-                {searchOpen ? (
-                  <motion.div
-                    initial={{ width: 40 }}
-                    animate={{ width: 280 }}
-                    exit={{ width: 40 }}
-                    className="relative"
-                  >
-                    <input
-                      type="text"
-                      placeholder={t("header.searchPlaceholder")}
-                      className="w-full h-10 pl-10 pr-4 rounded-xl bg-muted border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                      autoFocus
-                    />
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <button
-                      onClick={() => setSearchOpen(false)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      <X className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-                    </button>
-                  </motion.div>
-                ) : (
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    onClick={() => setSearchOpen(true)}
-                    className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
-                  >
-                    <Search className="w-4 h-4 text-muted-foreground" />
-                  </motion.button>
-                )}
-              </AnimatePresence>
+               <button className="w-10 h-10 rounded-xl hover:bg-muted flex items-center justify-center transition-all text-muted-foreground hover:text-primary hover:rotate-12">
+                <Search className="w-5.5 h-5.5" strokeWidth={2.5} />
+              </button>
             </div>
-
-            {/* Favorites */}
-            <button className="hidden sm:flex w-10 h-10 rounded-xl bg-muted items-center justify-center hover:bg-muted/80 transition-colors relative">
-              <Heart className="w-4 h-4 text-muted-foreground" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-accent text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                2
-              </span>
-            </button>
-
-            {/* User */}
-            <button className="hidden sm:flex w-10 h-10 rounded-xl bg-muted items-center justify-center hover:bg-muted/80 transition-colors">
-              <User className="w-4 h-4 text-muted-foreground" />
-            </button>
-
-            {/* Book Appointment CTA */}
+            
             <Link
               href="#book"
-              className="hidden md:flex items-center gap-2 h-10 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+              className="flex items-center gap-3 h-12 px-7 rounded-2xl bg-primary-dark text-white text-xs font-black uppercase tracking-[0.15em] shadow-xl shadow-primary/10 hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 transition-all border border-white/10"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4.5 h-4.5 text-primary" strokeWidth={3} />
               {t("header.book")}
             </Link>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden w-10 h-10 rounded-xl bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
-            >
-              {isOpen ? (
-                <X className="w-5 h-5 text-foreground" />
-              ) : (
-                <Menu className="w-5 h-5 text-foreground" />
-              )}
-            </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden w-12 h-12 rounded-2xl bg-muted/50 flex items-center justify-center text-foreground hover:bg-primary hover:text-white transition-all shadow-sm active:scale-95"
+          >
+            {isMobileMenuOpen ? <X className="w-6.5 h-6.5" /> : <Menu className="w-6.5 h-6.5" />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {isOpen && (
+        {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-border bg-background"
+            className="lg:hidden bg-white/95 backdrop-blur-2xl border-b border-border/50 shadow-2xl overflow-hidden"
           >
-            <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
-              {/* Mobile Search */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={t("header.searchPlaceholder")}
-                  className="w-full h-12 pl-12 pr-4 rounded-xl bg-muted border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              </div>
-
-              {/* Mobile Nav Links */}
-              <nav className="space-y-1">
+            <div className="px-6 py-10 space-y-8">
+               <div className="flex items-center justify-between pb-6 border-b border-border/50">
+                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Language</span>
+                 <div className="flex gap-2">
+                    <button 
+                      onClick={() => setLanguage("en")}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold ${language === "en" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}
+                    >EN</button>
+                    <button 
+                      onClick={() => setLanguage("hi")}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold ${language === "hi" ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}
+                    >HI</button>
+                 </div>
+               </div>
+              <div className="flex flex-col gap-6">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-foreground hover:bg-muted transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-2xl font-black text-foreground hover:text-primary transition-colors tracking-tight flex items-center justify-between group"
                   >
-                    <span className="font-medium">{link.name}</span>
-                    {link.hasMega && <ChevronDown className="w-5 h-5 text-muted-foreground" />}
+                    {link.name}
+                    <ArrowRight className="w-6 h-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
                   </Link>
                 ))}
-              </nav>
-
-              {/* Mobile CTAs */}
-              <div className="flex gap-3 pt-4 border-t border-border">
-                <button className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-muted text-foreground font-medium hover:bg-muted/80 transition-colors">
-                  <User className="w-5 h-5" />
-                  {t("header.signIn")}
-                </button>
+              </div>
+              <div className="pt-8 border-t border-border/50">
                 <Link
                   href="#book"
-                  onClick={() => setIsOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full h-16 rounded-[2rem] bg-primary text-white font-bold flex items-center justify-center gap-4 shadow-2xl shadow-primary/20 uppercase tracking-[0.2em] text-xs"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <Calendar className="w-5.5 h-5.5" strokeWidth={2.5} />
                   {t("header.book")}
                 </Link>
               </div>
@@ -262,5 +184,25 @@ export default function Header() {
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+function ArrowRight(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
   );
 }

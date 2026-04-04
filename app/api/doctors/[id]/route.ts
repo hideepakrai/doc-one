@@ -1,6 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DoctorService } from "@/services/doctor.service";
 import { isAdmin } from "@/lib/auth";
+import dbConnect from "@/lib/dbConnect";
+import Doctor from "@/models/Doctor";
+
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    await dbConnect();
+    const doctor = await Doctor.findById(params.id).populate("specialization", "name");
+    if (!doctor) {
+      return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
+    }
+    return NextResponse.json({
+      id: doctor._id.toString(),
+      name: doctor.name,
+      specialty: doctor.specialization?.name || "Unknown",
+      specializationId: doctor.specialization?._id,
+      image: doctor.image,
+      rating: doctor.rating,
+      reviews: doctor.reviews,
+      experience: doctor.experience,
+      location: doctor.location,
+      availabilityStatus: doctor.availabilityStatus,
+      available: doctor.availabilityStatus === "Available",
+      nextSlot: doctor.nextAvailable,
+      isFeatured: !!doctor.isFeatured,
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || "Failed to fetch doctor" }, { status: 500 });
+  }
+}
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {

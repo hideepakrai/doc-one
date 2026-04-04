@@ -10,7 +10,7 @@ interface SafeImageProps extends ImageProps {
 export default function SafeImage({ 
   src, 
   alt, 
-  fallback = "/placeholder.jpg", 
+  fallback = "https://cdn-icons-png.flaticon.com/512/3774/3774299.png", 
   ...props 
 }: SafeImageProps) {
   const [imgSrc, setImgSrc] = useState(src);

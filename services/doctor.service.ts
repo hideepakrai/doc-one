@@ -12,16 +12,32 @@ export class DoctorService {
     limit?: number;
     search?: string;
     specialization?: string;
+    status?: string;
+    isFeatured?: boolean;
+    sortBy?: string;
   }) {
     await dbConnect();
-    const { page = 1, limit = 10, search, specialization } = query;
+    const { 
+      page = 1, 
+      limit = 10, 
+      search, 
+      specialization, 
+      status, 
+      isFeatured,
+      sortBy = "createdAt"
+    } = query;
 
     const filter: any = {};
     if (search) {
       filter.name = { $regex: search, $options: "i" };
     }
+    if (isFeatured !== undefined) {
+      filter.isFeatured = isFeatured;
+    }
+    if (status) {
+      filter.availabilityStatus = status;
+    }
     if (specialization && specialization !== "All") {
-      // Find the specialization object by name first
       const spec = await Specialization.findOne({
           name: new RegExp(`^${specialization}$`, "i")
       });
@@ -32,9 +48,15 @@ export class DoctorService {
 
     const skip = (page - 1) * limit;
 
+    // Build sort object
+    let sortObj: any = { createdAt: -1 };
+    if (sortBy === "rating") sortObj = { rating: -1 };
+    else if (sortBy === "experience") sortObj = { experience: -1 };
+    else if (sortBy === "name") sortObj = { name: 1 };
+
     const doctors = await Doctor.find(filter)
       .populate("specialization", "name icon")
-      .sort({ createdAt: -1 })
+      .sort(sortObj)
       .skip(skip)
       .limit(limit);
 
@@ -44,13 +66,16 @@ export class DoctorService {
       id: doc._id.toString(),
       name: doc.name,
       specialty: doc.specialization?.name || "Unknown",
-      image: doc.image,
+      specializationId: doc.specialization?._id,
+      image: doc.image || "/placeholder-user.jpg",
       rating: doc.rating,
       reviews: doc.reviews,
-      experience: `${doc.experience} years`,
+      experience: doc.experience,
       location: doc.location,
+      availabilityStatus: doc.availabilityStatus,
       available: doc.availabilityStatus === "Available",
       nextSlot: doc.nextAvailable,
+      isFeatured: !!doc.isFeatured,
     }));
 
     return {
